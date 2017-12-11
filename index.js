@@ -6,8 +6,7 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 const publicPath = path.join(__dirname,'../client/build');
 
-//schema model
-const User = require('./models/user');
+
 
 //database setup
 const mongoose = require('mongoose');
@@ -20,23 +19,9 @@ app.use(morgan('dev'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-
-app.post('/create-user', (req,res) => {
-  const {firstName,lastName,password,email,address} = req.body;
-  const user = new User({
-    profile:{
-      firstName,
-      lastName
-    },
-    password,
-    email,
-    address
-  });
-  user.save()
-  .then(doc => res.send(doc))
-  .catch(err => res.status(400).send({err:err.message}))
-
-})
+//router
+const userRoute = require('./routes/user');
+app.use(userRoute);
 
 
 app.listen(PORT, (err) => {
